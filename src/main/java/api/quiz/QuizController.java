@@ -1,4 +1,4 @@
-package quiz;
+package api.quiz;
 
 import org.springframework.web.bind.annotation.*;
 
@@ -10,12 +10,12 @@ public class QuizController {
     private final String[] options = {"Robot","Tea leaf","Cup of coffee","Bug"};
     private final Quiz quiz = new Quiz(title, text, options);
 
-    @GetMapping("/quiz")
+    @GetMapping("/api/quiz")
     public Quiz getQuiz() {
         return quiz;
     }
 
-    @PostMapping("/quiz")
+    @PostMapping("/api/quiz")
     public Answer answerQuiz(@RequestParam("answer") int answer) {
         return new Answer(quiz, answer);
     }

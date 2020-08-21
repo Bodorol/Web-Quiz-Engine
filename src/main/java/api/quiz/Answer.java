@@ -1,4 +1,4 @@
-package quiz;
+package api.quiz;
 
 public class Answer {
 
