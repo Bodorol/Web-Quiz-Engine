@@ -1,20 +1,29 @@
 package api.quiz;
 
+import java.util.*;
+import org.springframework.stereotype.Component;
+
+@Component
 public class Answer {
 
     private boolean success;
     private String feedback;
+    private HashSet<Integer> answer = new HashSet<>();
 
-    public Answer(Quiz quiz, int answer) {
-        this.success = answer == 3;
-        if (success) {
-            this.feedback = "You won, yay";
-        } else {
-            this.feedback = "You lost, oh no";
-        }
+    public void init(Quiz quiz) {
+        success = quiz.checkAnswer(this.answer);
+        feedback = success ? "You won, yay!" : "You lost, oh no";
     }
 
-    public boolean isSuccess() {
+    public void setAnswers(HashSet<Integer> answers) {
+        this.answer = answers;
+    }
+
+    public void setAnswer(HashSet<Integer> answer) {
+        this.answer = answer;
+    }
+
+    public boolean getSuccess() {
         return success;
     }
 
@@ -23,3 +32,4 @@ public class Answer {
     }
 
 }
+

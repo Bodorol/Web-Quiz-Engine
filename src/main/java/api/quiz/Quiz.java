@@ -1,15 +1,21 @@
 package api.quiz;
 
+import java.util.*;
+import org.springframework.stereotype.Component;
+
+
+@Component
 public class Quiz {
 
-    private String title;
-    private String text;
-    private String[] options;
+    private static int idCount = 0;
+    private int id;
+    private String title = null;
+    private String text = null;
+    private String[] options = null;
+    private HashSet<Integer> answer = new HashSet<>();
 
-    public Quiz(String title, String text, String[] options) {
-        this.title = title;
-        this.text = text;
-        this.options = options;
+    public int getId() {
+        return id;
     }
 
     public String getTitle() {
@@ -22,6 +28,30 @@ public class Quiz {
 
     public String[] getOptions() {
         return options;
+    }
+
+    public void setId() {
+        this.id = ++idCount;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setOptions(String[] options) {
+        this.options = options;
+    }
+
+    public void setAnswer(HashSet<Integer> answer) {
+        this.answer = answer;
+    }
+
+    public boolean checkAnswer(HashSet<Integer> answers) {
+        return this.answer.equals(answers);
     }
 
 }
