@@ -14,11 +14,7 @@ public class Answer {
         success = quiz.checkAnswer(this.answer);
         feedback = success ? "You won, yay!" : "You lost, oh no";
     }
-
-    public void setAnswers(HashSet<Integer> answers) {
-        this.answer = answers;
-    }
-
+    
     public void setAnswer(HashSet<Integer> answer) {
         this.answer = answer;
     }

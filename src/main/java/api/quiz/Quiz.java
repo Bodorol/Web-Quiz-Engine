@@ -1,20 +1,34 @@
 package api.quiz;
 
 import java.util.*;
-import org.springframework.stereotype.Component;
+
+import javax.persistence.*;
 
 
-@Component
+@Entity(name="quiz")
 public class Quiz {
 
-    private static int idCount = 0;
-    private int id;
+    private static Long idCount = 0L;
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
+
+    @Column
     private String title = null;
+
+    @Column
     private String text = null;
+
+    @Column
     private String[] options = null;
+
+    @Column
     private HashSet<Integer> answer = new HashSet<>();
 
-    public int getId() {
+    public Quiz() {}
+
+    public Long getId() {
         return id;
     }
 
