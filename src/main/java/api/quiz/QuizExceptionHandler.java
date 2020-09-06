@@ -19,6 +19,15 @@ public class QuizExceptionHandler {
         response.put("error", e.getClass().getSimpleName());
         return response;
     }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public HashMap<String, String> handleNoSuchElementException(Exception e) {
+        HashMap<String, String> response = new HashMap<>();
+        response.put("message", NOT_FOUND_EXCEPTION);
+        response.put("error", e.getClass().getSimpleName());
+        return response;
+    }
 }
 
 
@@ -27,4 +36,24 @@ class RequiredException extends RuntimeException {
     public RequiredException(String message) {
         super(message);
     }
+}
+
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+class UserNotFoundException extends RuntimeException {
+    public UserNotFoundException(String message) { super(message); }
+}
+
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+class InvalidUsernameOrPasswordException extends RuntimeException {
+    public InvalidUsernameOrPasswordException(String message) { super(message); }
+}
+
+@ResponseStatus(code = HttpStatus.FORBIDDEN)
+class ForbiddenActionException extends RuntimeException {
+    public ForbiddenActionException(String message) { super(message); }
+}
+
+@ResponseStatus(code = HttpStatus.BAD_REQUEST)
+class UserAlreadyExistsException extends RuntimeException {
+    public UserAlreadyExistsException(String message) { super(message); }
 }

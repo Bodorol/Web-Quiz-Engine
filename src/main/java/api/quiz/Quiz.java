@@ -1,5 +1,7 @@
 package api.quiz;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.*;
 
 import javax.persistence.*;
@@ -25,6 +27,10 @@ public class Quiz {
 
     @Column
     private HashSet<Integer> answer = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name="Creator")
+    private User creator;
 
     public Quiz() {}
 
@@ -62,6 +68,15 @@ public class Quiz {
 
     public void setAnswer(HashSet<Integer> answer) {
         this.answer = answer;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
+
+    @JsonIgnore
+    public User getCreator() {
+        return creator;
     }
 
     public boolean checkAnswer(HashSet<Integer> answers) {
