@@ -1,6 +1,11 @@
 package api.quiz;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
@@ -10,6 +15,9 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CompletedQuizRepository completedQuizRepository;
 
     @Override
     public UserDetails loadUserByUsername(String username) {
@@ -36,5 +44,12 @@ public class UserService implements UserDetailsService {
         } else {
             throw new InvalidUsernameOrPasswordException("Invalid username or password");
         }
+    }
+
+    public Page<CompletedQuiz> getCompletedQuizzes(Integer page, Integer pageSize, String sortBy) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String solver = ((UserDetails)principal).getUsername();
+        Pageable paging = PageRequest.of(page, pageSize, Sort.by(sortBy).descending());
+        return completedQuizRepository.findBySolverContaining(solver, paging);
     }
 }

@@ -3,6 +3,7 @@ package api.quiz;
 import java.util.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,11 +17,21 @@ public class QuizController {
     private QuizRepository quizRepository;
 
     @Autowired
+    private CompletedQuizRepository completedQuizRepository;
+
+    @Autowired
     private UserService userService;
 
+    @Autowired
+    private QuizService quizService;
+
     @GetMapping("/api/quizzes")
-    public List<Quiz> getAllQuizzes() {
-        return quizRepository.findAll();
+    public Page<Quiz> getAllQuizzes(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "id") String sortBy
+    ) {
+        return quizService.getAllQuizzes(page, pageSize, sortBy);
     }
 
     @PostMapping(value = "api/quizzes", consumes = "application/json")
@@ -46,12 +57,29 @@ public class QuizController {
         return quizRepository.findById(id).get();
     }
 
+    @GetMapping("/api/quizzes/completed")
+    public Page<CompletedQuiz> getSolvedQuizzes(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer pageSize,
+            @RequestParam(defaultValue = "completedAt") String sortBy
+    ) {
+        return userService.getCompletedQuizzes(page, pageSize, sortBy);
+    }
+
     @PostMapping(value = "/api/quizzes/{id}/solve", consumes = "application/json")
     public Answer answerQuiz(@PathVariable Long id, @RequestBody Answer answer) {
         if (answer == null) {
             answer = new Answer();
         }
         answer.init(quizRepository.findById(id).get());
+        if (answer.getSuccess()) {
+            Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            String solver = ((UserDetails)principal).getUsername();
+            CompletedQuiz quiz = new CompletedQuiz();
+            quiz.setId(id);
+            quiz.setSolver(solver);
+            completedQuizRepository.save(quiz);
+        }
         return answer;
     }
 
@@ -62,7 +90,6 @@ public class QuizController {
         String username = ((UserDetails)principal).getUsername();
         User user = userService.getUserByUsername(username);
         if (quiz.getCreator() != user) {
-            System.out.println("here!");
             throw new ForbiddenActionException("Unable to delete quiz: User does not own quiz");
         } else {
             quizRepository.delete(quiz);
