@@ -1,4 +1,4 @@
 # Web-Quiz-Engine
-# About:
+## About:
 ## How to run:
 ## How to use:
