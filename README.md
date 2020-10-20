@@ -15,7 +15,7 @@ Send a POST request to localhost:8080/api/register with JSON in the body of the 
 Your email must be a valid email address\
 Your password must be at least 5 characters long.
 ### To see all quizzes:
-Send a GET request to localhost:8080/api/quizzes to see a paginated list of all quizzes.\
+Send a GET request to localhost:8080/api/quizzes to see a paginated list of all quizzes.
 #### Optional parameters:
 page: sets the page number.\
 pageSize: sets the number of quizzes per page.\
