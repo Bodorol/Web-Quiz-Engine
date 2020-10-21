@@ -1,7 +1,8 @@
 # Web-Quiz-Engine
 ## About:
+This is a RESTful API built using Java and Spring that provides the ability to create and solve quizzes.\
 ## How to run:
-1. Build the project by running ```gradlew build```.
+1. Build the project by running ```gradlew build```
 2. Run the generated .jar file.
 ## How to use:
 ### To register an account:
